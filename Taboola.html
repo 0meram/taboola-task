@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>Taboola</title>
+<style>
+html {
+  background-color: #f1f1f1;
+  padding: 1rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  padding: 0px;
+}
+
+ #myDIV {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: space-between;
+} 
+#myDIV a {
+  max-width: 350px;
+  color: black;
+  text-decoration: none;
+}
+
+#myDIV div {
+  max-width: 350px;
+}
+
+#myDIV img {
+  max-width: 350px;
+  border-radius: 3px;
+}
+
+#myDIV span {
+  max-width: 350px;
+}
+</style>
+  </head>
+
+  <body>
+    <h1>thought you might be interested</h1>
+    <div class="grid-container" id="myDIV"></div>
+
+    <script>
+  function createNode(element) {
+      return document.createElement(element);
+  }
+
+  function append(parent, el) {
+    return parent.appendChild(el);
+  }
+
+  const wrap = document.getElementById('myDIV');
+  const url = "https://api.taboola.com/1.2/json/newsplace-tndemotester/recommendations.get?app.apikey=f44d224ed117102b74bed53b82e6079af28600d5&app.type=mobile&source.type=home&source.id=%2F&source.url=http%3A%2F%2Fexample.com&placement.name=Editorial%20Trending&placement.rec-count=100&placement.organic-type=mix&placement.thumbnail.width=640&placement.thumbnail.height=480&user.session=init";
+
+  fetch(url)
+  .then((res) => res.json())
+  .then(function(data) {
+    console.log(data.list);
+    let list = data.list;
+    return list.map(function(item) {
+      let div = createNode('div'),
+          img = createNode('img'),
+          span = createNode('span');
+          p = createNode('p');
+          link = createNode('a');
+      link.href = item.url
+      img.src = item.thumbnail[0].url;
+      span.innerHTML = item.branding;
+      p.innerHTML = item.name;
+      append(div, img);
+      append(div, p);
+      append(div, span);
+      append(link, div);
+      append(wrap, link);
+    })
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+    </script>
+  </body>
+</html>
